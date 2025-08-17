@@ -407,7 +407,7 @@ function Refresh(Table, Record, DueMode) {
 	const PickDateRow = new Layout(Table);
 	const SettingRow = new Layout(Table);
 	const FormatDate = GetDueDate(Record.saveData.dueDate);
-	const ColorName= [Lg.Get("black"), Lg.Get("red"), Lg.Get("green"), Lg.Get("blue")];
+	const ColorName= ["⚫️", "🔴", "🟢", "🔵"];
 	const UIMode = {
 		color: {
 			active: Color.dynamic(new Color("#000000"), new Color("#FFFFFF")),
