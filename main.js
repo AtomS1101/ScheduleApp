@@ -50,7 +50,7 @@ class SmartFile {
 		const _FM = FileManager.local();
 		this.fm = _FM.isFileStoredIniCloud(module.filename) ? FileManager.iCloud() : _FM;
 		this.libraryPath = this.fm.joinPath(this.fm.libraryDirectory(), filePath);
-		this.extention = filePath.slice(filePath.lastIndexOf(".") + 1).toLowerCase();
+		this.extension = filePath.slice(filePath.lastIndexOf(".") + 1).toLowerCase();
 	}
 	create(content){
 		if (!this.fm.fileExists(this.libraryPath)) {
@@ -60,11 +60,11 @@ class SmartFile {
 	get content(){
 		if (!this.fm.fileExists(this.libraryPath)) return undefined;
 		const Content = this.fm.readString(this.libraryPath);
-		return this.extention == "json"
+		return this.extension == "json"
 			? JSON.parse(Content) : Content;
 	}
 	set content(newValue){
-		this.fm.writeString(this.libraryPath, this.extention == "json"
+		this.fm.writeString(this.libraryPath, this.extension == "json"
 			? JSON.stringify(newValue, null, "\t") : String(newValue)
 		);
 	}
@@ -119,9 +119,9 @@ function GetDueDate(DueDate) {
 		return { date: "unset", shortForm: "unset", longForm: "unset", isOver: "unset"};
 	}
 	const TimeStamp = Math.round(Date.now() / 100000) * 100000;
-	const Difference = new Date(Math.abs(DueDate - TimeStamp));
-	const DifDays = Difference.getUTCDate() - 1;
-	const DifHour = Difference.getUTCHours();
+	const Difference = Math.abs(DueDate - TimeStamp);
+	const DifDays = Math.floor(Difference / 86400000);
+	const DifHour = Math.floor((Difference % 86400000) / 3600000);
 	const Formatter = new DateFormatter();
 	const IsOver = DueDate < TimeStamp;
 
@@ -199,10 +199,10 @@ class BtnAction {
 		const PickedColor = await PresentAlert({
 			type: "sheet",
 			title: Lg.Get("prioritize"),
-			act1: Lg.Get("black"),
-			act2: Lg.Get("red"),
-			act3: Lg.Get("green"),
-			act4: Lg.Get("blue"),
+			act1: "⚫️",
+			act2: "🔴",
+			act3: "🟢",
+			act4: "🔵",
 			can5: Lg.Get("cancel"),
 		});
 		return PickedColor.index !== -1 ? PickedColor.index : DefaultColor;
@@ -889,22 +889,6 @@ function GetData(type) {
 				setting: {
 					en: "Setting",
 					ja: "設定",
-				},
-				black: {
-					en: "⚫️ Black",
-					ja: "⚫️ くろ",
-				},
-				red: {
-					en: "🔴 Red",
-					ja: "🔴 あか",
-				},
-				green: {
-					en: "🟢 Green",
-					ja: "🟢 みどり",
-				},
-				blue: {
-					en: "🔵 Blue",
-					ja: "🔵 あお",
 				},
 				add: {
 					en: "Add",
